@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#153d52">
+<title>Einfach geholfen – Testversion</title>
+<style>
+:root{--navy:#153d52;--teal:#176b82;--pale:#eaf3f6;--ink:#183746;--muted:#617782;--line:#dce6ea}
+*{box-sizing:border-box}body{margin:0;background:#f3f7f8;color:var(--ink);font:17px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:var(--navy);color:white;padding:18px 18px 16px;position:sticky;top:0;z-index:2}
+.brand{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:750}.logo{background:#fff;color:var(--navy);border-radius:13px;width:42px;height:42px;display:grid;place-items:center;font-size:24px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+select{border:1px solid #9fb8c3;border-radius:10px;padding:9px;background:white;color:var(--ink);font-size:15px}
+main{max-width:560px;margin:auto;padding:22px 16px 34px}
+h1{font-size:30px;line-height:1.12;margin:8px 0 10px;color:var(--navy)}h2{font-size:23px;margin:8px 0 12px;color:var(--navy)}
+p{line-height:1.45}.muted{color:var(--muted)}.hero{padding:10px 2px 18px}
+.btn{width:100%;border:0;border-radius:18px;padding:19px 16px;font-size:19px;font-weight:750;cursor:pointer;text-align:center}
+.primary{background:var(--teal);color:white;min-height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+.secondary{background:white;border:1px solid var(--line);color:var(--ink);text-align:left;margin-top:12px;display:flex;align-items:center;gap:14px;padding:17px}
+.symbol{font-size:26px}.small{font-size:13px;color:var(--muted);font-weight:450}
+.card{background:white;border:1px solid var(--line);border-radius:17px;padding:16px;margin:12px 0}
+.choice{width:100%;background:white;border:1px solid var(--line);border-radius:14px;padding:15px;text-align:left;font-size:17px;margin:6px 0;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:12px}
+.back{background:transparent;border:0;color:var(--teal);font-size:16px;padding:8px 0;cursor:pointer}
+label{display:block;font-weight:650;margin:14px 0 6px}input,textarea{width:100%;border:1px solid #b9cbd2;border-radius:12px;padding:13px;font:inherit;background:white}textarea{min-height:120px;resize:vertical}
+.notice{background:var(--pale);border-radius:14px;padding:14px;font-size:14px;line-height:1.45}
+footer{max-width:560px;margin:auto;padding:0 16px 26px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap}footer button{border:0;background:none;color:var(--muted);text-decoration:underline;font-size:13px;cursor:pointer}
+.hidden{display:none!important}.success{border:1px solid #a7cdb8;background:#f0f8f3;padding:14px;border-radius:13px;margin-top:12px}
+</style>
+</head>
+<body>
+<header><div class="topline"><div class="brand"><div class="logo">♡</div><span>Einfach geholfen</span></div>
+<select id="language" aria-label="Sprache"><option value="de">Deutsch</option><option value="ru">Русский</option><option value="en">English</option><option value="uk">Українська</option></select></div></header>
+<main>
+<section id="home">
+<div class="hero"><h1 id="welcome">Schön, dass du da bist.</h1><p id="subtitle" class="muted">Ganz gleich, wobei du Unterstützung brauchst – wir versuchen gemeinsam einen Weg zu finden.</p></div>
+<button class="btn primary" onclick="show('help')"><span style="font-size:30px">♡</span><span id="need">ICH BRAUCHE HILFE</span><span class="small" style="color:#e5f1f4" id="oneclick">Ein Klick genügt.</span></button>
+<button class="btn secondary" onclick="show('learn')"><span class="symbol">📘</span><span><strong id="learnLabel">Ich möchte etwas lernen</strong><br><span class="small">Einfache Anleitungen entdecken</span></span></button>
+<button class="btn secondary" onclick="setCategory('Ich möchte mit jemandem sprechen');show('contact')"><span class="symbol">💬</span><span><strong id="talkLabel">Ich möchte mit jemandem sprechen</strong><br><span class="small">Persönliche Unterstützung anfragen</span></span></button>
+</section>
+<section id="help" class="hidden"><button class="back" onclick="show('home')">← <span id="back1">Zurück</span></button><h2 id="choose">Wobei können wir dir helfen?</h2><div id="categories"></div></section>
+<section id="learn" class="hidden"><button class="back" onclick="show('home')">← Zurück</button><h2 id="learnTitle">Einfach erklärt</h2><div id="lessons"></div></section>
+<section id="contact" class="hidden"><button class="back" onclick="show('help')">← Zurück</button><h2 id="contactTitle">Wir hören dir zu.</h2><div class="notice" id="selectedTopic">Dein Thema</div>
+<label for="person" id="nameLabel">Dein Name (optional)</label><input id="person" autocomplete="name" placeholder="Name">
+<label for="reply" id="replyLabel">Wie können wir dich erreichen? (optional)</label><input id="reply" autocomplete="email" placeholder="E-Mail oder Telefonnummer">
+<label for="message" id="messageLabel">Wobei brauchst du Unterstützung?</label><textarea id="message" placeholder="Schreib uns, worum es geht …"></textarea>
+<p class="small" id="privacyLine">Bitte sende hier keine Passwörter, Bankdaten oder besonders vertraulichen Informationen.</p>
+<button class="btn primary" style="min-height:60px" onclick="prepareMessage()" id="prepare">Anfrage lokal vorbereiten</button>
+<div id="prepared" class="success hidden"></div>
+<p class="small" id="notSent">Testversion: Diese Anfrage wird nicht verschickt oder gespeichert.</p></section>
+<section id="about" class="hidden"><button class="back" onclick="show('home')">← Zurück</button><h2 id="aboutTitle">Über diese Hilfe</h2><div class="card" id="aboutText">Hier hilft ein Mensch einem anderen Menschen. Es werden persönliche Erfahrungen, Erklärungen und Anregungen angeboten. Der Anbieter ist kein Arzt, Psychologe, Rechtsanwalt oder Finanzberater. Die Unterstützung ersetzt keine professionelle Beratung, Behandlung oder Betreuung. Es werden keine Diagnosen gestellt und keine bestimmten Ergebnisse versprochen. Du entscheidest selbst, welche Hinweise du annimmst. Bei akuter Gefahr oder einem Notfall wende dich bitte an den örtlichen Notruf oder geeignete professionelle Hilfe.</div></section>
+<section id="privacy" class="hidden"><button class="back" onclick="show('home')">← Zurück</button><h2>Datenschutz im Test</h2><div class="card">Diese herunterladbare Testversion sendet keine Daten an einen Server und speichert keine Anfragen dauerhaft. Die Eingaben bleiben nur während der Nutzung dieser geöffneten Seite im Browser. Für eine echte Veröffentlichung müssen ein vollständiges Datenschutzkonzept, sichere Übertragung, Speicherfristen, Löschmöglichkeiten und passende Nutzungsbedingungen eingerichtet und geprüft werden.</div></section>
+</main>
+<footer><button onclick="show('about')" id="aboutLink">Über diese Hilfe</button><button onclick="show('privacy')">Datenschutz im Test</button><button onclick="show('home')">Startseite</button></footer>
+<script>
+const dict={
+de:{welcome:"Schön, dass du da bist.",subtitle:"Ganz gleich, wobei du Unterstützung brauchst – wir versuchen gemeinsam einen Weg zu finden.",need:"ICH BRAUCHE HILFE",one:"Ein Klick genügt.",learn:"Ich möchte etwas lernen",talk:"Ich möchte mit jemandem sprechen",choose:"Wobei können wir dir helfen?",cats:["Handy & Smartphone","WhatsApp","Internet & Computer","Fernseher & Technik","Alltag & Orientierung","Dokumente & Behörden","Ich möchte einfach reden"],lessons:["Handy einfach bedienen","WhatsApp-Nachrichten schreiben","Fotos verschicken","Sicher im Internet unterwegs sein","Apps installieren und nutzen","Online-Formulare verstehen"],contact:"Wir hören dir zu.",name:"Dein Name (optional)",reply:"Wie können wir dich erreichen? (optional)",message:"Wobei brauchst du Unterstützung?",prepare:"Anfrage lokal vorbereiten",privacy:"Bitte sende hier keine Passwörter, Bankdaten oder besonders vertraulichen Informationen.",notSent:"Testversion: Diese Anfrage wird nicht verschickt oder gespeichert."},
+en:{welcome:"It's good to have you here.",subtitle:"Whatever you need help with, let's try to find a way together.",need:"I NEED HELP",one:"One tap is all it takes.",learn:"I want to learn something",talk:"I want to talk to someone",choose:"What can we help you with?",cats:["Phone & smartphone","WhatsApp","Internet & computers","TV & technology","Everyday life & orientation","Documents & authorities","I just want to talk"],lessons:["Using your phone","Writing WhatsApp messages","Sending photos","Staying safe online","Installing and using apps","Understanding online forms"],contact:"We're here to listen.",name:"Your name (optional)",reply:"How can we contact you? (optional)",message:"What would you like help with?",prepare:"Prepare request on this device",privacy:"Please do not enter passwords, bank details or highly confidential information.",notSent:"Test version: this request is not sent or saved."},
+ru:{welcome:"Рады, что вы здесь.",subtitle:"Что бы ни случилось, давайте попробуем вместе найти решение.",need:"МНЕ НУЖНА ПОМОЩЬ",one:"Достаточно одного нажатия.",learn:"Я хочу чему-то научиться",talk:"Я хочу с кем-нибудь поговорить",choose:"С чем вам помочь?",cats:["Телефон и смартфон","WhatsApp","Интернет и компьютеры","Телевизор и техника","Повседневная жизнь","Документы и учреждения","Я просто хочу поговорить"],lessons:["Как пользоваться телефоном","Как писать в WhatsApp","Как отправлять фото","Безопасность в интернете","Установка приложений","Онлайн-формы"],contact:"Мы вас выслушаем.",name:"Ваше имя (необязательно)",reply:"Как с вами связаться? (необязательно)",message:"В чём вам нужна помощь?",prepare:"Подготовить запрос на устройстве",privacy:"Не указывайте пароли, банковские данные и конфиденциальную информацию.",notSent:"Тестовая версия: запрос не отправляется и не сохраняется."},
+uk:{welcome:"Раді, що ви тут.",subtitle:"Що б вам не знадобилося, спробуймо разом знайти рішення.",need:"МЕНІ ПОТРІБНА ДОПОМОГА",one:"Достатньо одного натискання.",learn:"Я хочу чогось навчитися",talk:"Я хочу з кимось поговорити",choose:"З чим ми можемо допомогти?",cats:["Телефон і смартфон","WhatsApp","Інтернет і комп’ютери","Телевізор і техніка","Повсякденне життя","Документи й установи","Я просто хочу поговорити"],lessons:["Як користуватися телефоном","Як писати у WhatsApp","Як надсилати фото","Безпека в інтернеті","Встановлення застосунків","Онлайн-форми"],contact:"Ми вас вислухаємо.",name:"Ваше ім’я (необов’язково)",reply:"Як з вами зв’язатися? (необов’язково)",message:"З чим вам потрібна допомога?",prepare:"Підготувати запит на пристрої",privacy:"Не вводьте паролі, банківські дані чи конфіденційну інформацію.",notSent:"Тестова версія: запит не надсилається і не зберігається."}
+};
+let current='de',category='';
+function show(id){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo(0,0)}
+function setCategory(c){category=c;document.getElementById('selectedTopic').textContent=c;document.getElementById('prepared').classList.add('hidden')}
+function chooseCategory(c){setCategory(c);show('contact')}
+function prepareMessage(){let m=document.getElementById('message').value.trim();if(!m){alert(current==='de'?'Bitte beschreibe kurz dein Anliegen.':'Please briefly describe what you need help with.');return}let box=document.getElementById('prepared');box.textContent=current==='de'?'Deine Anfrage wurde nur auf diesem Gerät vorbereitet. Sie wurde NICHT versendet.':current==='ru'?'Запрос подготовлен только на этом устройстве. Он НЕ отправлен.':current==='uk'?'Запит підготовлено лише на цьому пристрої. Його НЕ надіслано.':'Your request was prepared on this device only. It has NOT been sent.';box.classList.remove('hidden')}
+function setLang(code){current=code;let d=dict[code];document.documentElement.lang=code;
+const map={welcome:d.welcome,subtitle:d.subtitle,need:d.need,oneclick:d.one,learnLabel:d.learn,talkLabel:d.talk,choose:d.choose,learnTitle:d.learn,contactTitle:d.contact,nameLabel:d.name,replyLabel:d.reply,messageLabel:d.message,prepare:d.prepare,privacyLine:d.privacy,notSent:d.notSent};
+Object.entries(map).forEach(([id,v])=>document.getElementById(id).textContent=v);
+document.getElementById('categories').innerHTML=d.cats.map((c,i)=>`<button class="choice" onclick="chooseCategory(${JSON.stringify(c).replace(/"/g,'&quot;')})"><span>${['📱','💬','🌐','📺','🏡','📄','♡'][i]}</span>${c}<span style="margin-left:auto">›</span></button>`).join('');
+document.getElementById('lessons').innerHTML=d.lessons.map((x,i)=>`<div class="card">📘 ${x}</div>`).join('');
+document.getElementById('language').value=code;
+}
+let deviceLang=(navigator.language||'de').slice(0,2);setLang(dict[deviceLang]?deviceLang:'de');
+document.getElementById('language').addEventListener('change',e=>setLang(e.target.value));
+</script>
+</body></html>
